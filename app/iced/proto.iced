@@ -3,7 +3,7 @@
 #
 module.exports = (utils) ->
 	proto2base64 = require('base64-arraybuffer')
-	utils.proto = require("protobufjs").loadProtoFile("./kzsh_proto/kzsh.proto").build("kzsh.proto")
+	utils.proto = require("protobufjs").loadProtoFile("./studio_proto/studio.proto").build("lemooor.studio")
 	utils.stringifyEnums = (message) ->
 		if (message and message.$type and message.$type.children)
 			message.$type.children.forEach((child) ->

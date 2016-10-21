@@ -1,0 +1,3 @@
+[submodule "app/assets/studio_proto"]
+	path = app/assets/studio_proto
+	url = https://github.com/timCF/studio_proto.git

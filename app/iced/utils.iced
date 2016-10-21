@@ -1,3 +1,40 @@
+calendar_opts = {
+	height: "auto",
+	lang: 'ru',
+	firstDay: 1,
+	monthNames: [
+		"Январь",
+		"Февраль",
+		"Март",
+		"Апрель",
+		"Май",
+		"Июнь",
+		"Июль",
+		"Август",
+		"Сентябрь",
+		"Октябрь",
+		"Ноябрь",
+		"Декабрь",
+	],
+	dayNames: [
+		"Воскресенье",
+		"Понедельник",
+		"Вторник",
+		"Среда",
+		"Четверг",
+		"Пятница",
+		"Суббота",
+	],
+	buttonText: {
+		today: 'сегодня',
+		month: 'месяц',
+		week: 'неделя',
+		day: 'день'
+	},
+	columnFormat: 'dddd',
+	eventAfterRender: ((data, element, _) -> $(element).css('width', ($(element).width() * data.percentfill) + 'px'))
+}
+
 jf = require('jsfunky')
 urijs = require('urijs')
 module.exports =
@@ -28,3 +65,41 @@ module.exports =
 	multiple_select: (state, path, ev) ->
 		if (ev? and ev.target?)
 			jf.put_in(state, path, [].slice.call(ev.target.options).filter((el) -> el.selected).map((el) -> el.value))
+	rerender_events_coroutine_process: (state, prevstate) ->
+		# rm html elements and create new state ...
+		newstate = jf.reduce(state, {}, (k,v,acc) -> jf.put_in(acc, [k], jf.clone(v)))
+		if not(jf.equal(prevstate, newstate))
+			calendar = $("#calendar")
+			if (calendar.length > 0)
+				calendar.fullCalendar(calendar_opts)
+				calendar.fullCalendar( 'removeEventSources' )
+				calendar.fullCalendar( 'removeEvents' )
+				calendar.fullCalendar( 'addEventSource', state.events)
+				console.log("re-render "+state.events.length+" events ... new state is")
+			newstate
+		else
+			prevstate
+	rerender_events_coroutine: (state, this_state) ->
+		utils = @
+		try
+			this_state = utils.rerender_events_coroutine_process(state, this_state)
+			setTimeout((() -> utils.rerender_events_coroutine(state, this_state)), 500)
+		catch error
+			console.log("RENDER EVENTS ERROR !!! ", error)
+			setTimeout((() -> utils.rerender_events_coroutine(state, this_state)), 500)
+	create_event: ({id: id, time_from: time_from, time_to: time_to, room_id: room_id, status: status}, state) ->
+		m_from = moment(time_from * 1000)
+		m_to = moment(time_to * 1000)
+		percentfill = Math.abs(time_to - time_from) / 10800
+		percentfill = if (percentfill > 1) then 1 else percentfill
+		this_room = if (state.dicts.rooms_full and state.dicts.rooms_full[room_id.toString()]) then state.dicts.rooms_full[room_id.toString()] else null
+		{
+			id: id,
+			title: m_from.format('HH:mm')+" - "+m_to.format('HH:mm'),
+			start: m_from.format('YYYY-MM-DD'),
+			end: m_to.format('YYYY-MM-DD'),
+			percentfill: percentfill,
+			room_id: room_id,
+			status: status,
+			color: if not(this_room) then state.colors.sesions[status] else (if (status == "SS_awaiting_first") then this_room.color else net.brehaut.Color(this_room.color).setAlpha(0.3).toString())
+		}

@@ -28,7 +28,10 @@ mixin navbar()
 				button.btn.btn-danger.btn-lg.color2(type="button" data-toggle="tooltip" data-placement="bottom" title="swag")
 					span.fa.fa-usd.myicon
 mixin main()
-	div= "TODO"
+	div.container-fluid.mt
+		div.row.text-center
+			div.col-xs-12
+				div(id="calendar")
 mixin auth()
 	div.center_abs.widthlim
 		form

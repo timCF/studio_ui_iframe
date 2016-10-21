@@ -23,6 +23,8 @@ document.addEventListener "DOMContentLoaded", (e) ->
 		# NOTICE !!! not reload page on submit forms
 		$('form').submit((e) -> e.preventDefault())
 	render = (cb) ->
+		state.dimensions.height = window.innerHeight
+		state.dimensions.width = window.innerWidth
 		render_tooltips()
 		render_jqcb()
 		$('.selectpicker').selectpicker({noneSelectedText: "ничего не выбрано"})
@@ -42,11 +44,16 @@ document.addEventListener "DOMContentLoaded", (e) ->
 		login: '',
 		password: '',
 		errormess: "неизвестная ошибка",
-		room_id: false
+		room_id: false,
+		request_template: false,
+		response_state: false,
+		events: [],
+		dimensions: {width: 0, height: 0},
+		dicts: {}
 	}
 	#
 	# state for main function, mutable
 	#
-	utils = Object.freeze( jf.merge(require("iced/utils"), {render: render, render_coroutine: render_coroutine}) )
+	utils = Object.freeze(tmp = require("iced/bullet")(require("iced/proto")(require("iced/utils")), state) ; tmp.render = render ; tmp.render_coroutine = render_coroutine ; tmp)
 	fullstate = Object.freeze({state: state, utils: utils})
 	require("ls/main")(state, utils)
