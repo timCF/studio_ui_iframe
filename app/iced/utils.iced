@@ -82,6 +82,7 @@ module.exports =
 		if not(jf.equal(prevstate, newstate))
 			calendar = $("#calendar")
 			if (calendar.length > 0)
+				calendar_opts.firstDay = moment().day()
 				calendar.fullCalendar(calendar_opts)
 				calendar.fullCalendar( 'removeEventSources' )
 				calendar.fullCalendar( 'removeEvents' )
