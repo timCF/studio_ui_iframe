@@ -1,4 +1,15 @@
 calendar_opts = {
+	timeFormat: 'HH:mm',
+	defaultView: 'agendaWeek',
+	views: {
+		agenda: {
+			titleFormat: "MMMM D",
+			minTime: "09:00:00",
+			slotLabelInterval: "01:00:00",
+			slotLabelFormat: 'HH:mm',
+			allDaySlot: false,
+		}
+	},
 	height: "auto",
 	lang: 'ru',
 	firstDay: 1,
@@ -91,15 +102,15 @@ module.exports =
 		m_from = moment(time_from * 1000)
 		m_to = moment(time_to * 1000)
 		percentfill = Math.abs(time_to - time_from) / 10800
-		percentfill = if (percentfill > 1) then 1 else percentfill
+		percentfill = 1
 		this_room = if (state.dicts.rooms_full and state.dicts.rooms_full[room_id.toString()]) then state.dicts.rooms_full[room_id.toString()] else null
 		{
 			id: id,
-			title: m_from.format('HH:mm')+" - "+m_to.format('HH:mm'),
-			start: m_from.format('YYYY-MM-DD'),
-			end: m_to.format('YYYY-MM-DD'),
+			title: "занято",
+			start: m_from.format('YYYY-MM-DDTHH:mm:ss'),
+			end: m_to.format('YYYY-MM-DDTHH:mm:ss'),
 			percentfill: percentfill,
 			room_id: room_id,
 			status: status,
-			color: if not(this_room) then state.colors.sesions[status] else (if (status == "SS_awaiting_first") then this_room.color else net.brehaut.Color(this_room.color).setAlpha(0.3).toString())
+			color: this_room.color
 		}
