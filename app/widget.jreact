@@ -1,0 +1,48 @@
+- var utils = locals.utils
+- var state = locals.state
+- var optionlg = "form-control input-lg text-center noborder"
+mixin selectitems(list, path, dict)
+	- var currentval = utils.jf.get_in(state, path)
+	- var this_val = list.filter(function(el){return (el == currentval);})[0]
+	- var placeholder = ((this_val == currentval) ? dict[this_val] : "ничего не выбрано")
+	select.selectpicker.form-control(onChange=utils.view_set(state, path) data-live-search="true" title=placeholder)
+		each el in list
+			option(key=el value=el)= dict[el]
+mixin selectitems_multiple(list, path, dict)
+	- var currentval = utils.jf.get_in(state, path)
+	- var this_val = (currentval ? currentval : []).map(function(el){return el.toString();})
+	select.selectpicker.form-control(multiple onChange=utils.multiple_select(state, path) data-live-search="true" defaultValue=this_val)
+		each el in list
+			option(key=el value=el)= dict[el]
+mixin fileinput(path)
+	div.btn.btn-default.btn-lg.btn-file.fill Browse or drag and drop files
+		input(type="file" multiple="true" onChange=utils.view_files(state, path))
+mixin navbar()
+	div.container-fluid
+		div.row.text-center
+			div.btn-group.ml.mt
+				button.btn.btn-default.btn-lg(onClick=utils.info("hello nextgenjs")) info
+				button.btn.btn-info.btn-lg(onClick=utils.notice("hello nextgenjs")) notice
+				button.btn.btn-warning.btn-lg(onClick=utils.warn("hello nextgenjs")) warn
+				button.btn.btn-danger.btn-lg(onClick=utils.error("hello nextgenjs")) error
+				button.btn.btn-danger.btn-lg.color2(type="button" data-toggle="tooltip" data-placement="bottom" title="swag")
+					span.fa.fa-usd.myicon
+mixin main()
+	div= "TODO"
+mixin auth()
+	div.center_abs.widthlim
+		form
+			input.form-control.fill.megaform(tabIndex="1" type="text" id="login" placeholder="логин" autoComplete="on" onChange=utils.view_set(state, ["login"]))
+			input.form-control.fill.megaform(tabIndex="2" type="password" id="password" placeholder="пароль" autoComplete="off" onChange=utils.view_set(state, ["password"]))
+			button.btn.btn-primary.fill.submitmegaform(type="submit" data-toggle="tooltip" data-placement="bottom" title="войти" onClick=utils.auth(state))
+				span.myicon(class="fa fa-sign-in" aria-hidden="true")
+mixin errormess()
+	div.center_abs.widthlim.text-center
+		h1.text-center= state.errormess
+//
+//	CONTENT
+//
+if state.ok
+	+main()
+else
+	+errormess()

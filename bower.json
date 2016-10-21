@@ -1,0 +1,30 @@
+{
+  "name": "nextlive",
+  "description": "Description",
+  "main": "",
+  "authors": [
+    "timCF"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/timCF/nextlive",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "react": "^0.14.7",
+    "jquery": "^2.2.2",
+    "growl": "^1.3.1",
+    "downloadjs": "timCF/download#cd47f8ae7ceee80d49b953681bbb2c4542d7efdd",
+    "font-awesome": "^4.6.3",
+    "bulletjs": "*",
+    "moment": "^2.14.1",
+    "bootstrap-select": "^1.10.0",
+    "toastr": "^2.1.3"
+  }
+}
