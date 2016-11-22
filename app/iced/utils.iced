@@ -49,6 +49,7 @@ calendar_opts = {
 jf = require('jsfunky')
 urijs = require('urijs')
 module.exports =
+	tz: "Europe/Moscow"
 	jf: jf
 	state_error: (state, error) ->
 		state.ok = false
@@ -100,6 +101,7 @@ module.exports =
 			console.log("RENDER EVENTS ERROR !!! ", error)
 			setTimeout((() -> utils.rerender_events_coroutine(state, this_state)), 500)
 	create_event: ({id: id, time_from: time_from, time_to: time_to, room_id: room_id, status: status}, state) ->
+		utils = @
 		m_from = moment(time_from * 1000)
 		m_to = moment(time_to * 1000)
 		percentfill = Math.abs(time_to - time_from) / 10800
@@ -108,8 +110,8 @@ module.exports =
 		{
 			id: id,
 			title: "занято",
-			start: m_from.format('YYYY-MM-DDTHH:mm:ss'),
-			end: m_to.format('YYYY-MM-DDTHH:mm:ss'),
+			start: m_from.tz(utils.tz).format('YYYY-MM-DDTHH:mm:ss'),
+			end: m_to.tz(utils.tz).format('YYYY-MM-DDTHH:mm:ss'),
 			percentfill: percentfill,
 			room_id: room_id,
 			status: status,

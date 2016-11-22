@@ -8,7 +8,7 @@ module.exports = (utils, state) ->
 		msg.cmd = 'CMD_ping'
 		msg
 	long2date = (long) ->
-		moment(1000 * parseInt(long.toString())).format('YYYY-MM-DD HH:mm:ss')
+		moment(1000 * parseInt(long.toString())).tz(utils.tz).format('YYYY-MM-DD HH:mm:ss')
 	port = ":7772"
 	#port = if location.port then ":"+location.port else ""
 	#bullet = $.bullet((if window.location.protocol == "https:" then "wss://" else "ws://") + location.hostname + port + location.pathname + "bullet")
